@@ -1,0 +1,28 @@
+.custom-select {
+    position: relative;
+    width: 100%; 
+  }
+  
+  .select-image {
+    display: absolute; 
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+  }
+  
+  #imageSelect {
+    width: 100%;
+    padding: 5px;
+    margin: -10px;
+  }
+  
+  #imageSelect option[data-image] {
+    padding-left: 34px;
+  }
+  
+  #imageSelect option[data-image]:hover {
+    background-color: #f0f0f0;
+  }
+  
