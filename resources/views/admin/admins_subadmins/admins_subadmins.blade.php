@@ -75,7 +75,6 @@
                                         {{ $admin->status == 'ACTIVE' ? 'Disable' : 'Enable' }}
                                     </button>
                                 </form>
-                                <a href="{{ url('admin/permissions/'.$admin->id.'/'.$role->id) }}" type="button" class="btn btn-warning btn-sm">Permissions</a>
                                 @endif
                             </td>
                         </tr>

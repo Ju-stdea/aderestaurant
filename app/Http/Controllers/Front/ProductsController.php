@@ -76,7 +76,7 @@ class ProductsController extends Controller
         $products = Cache::remember('front.home' . request()->get('page', 1), 60, function () {
             return Product::orderBy('created_at', 'desc')
                 ->with('reviews')
-                ->paginate(16, ['*'], 'products');
+                ->paginate(20, ['*'], 'products');
         });
 
         // Calculate the total results and the current range
@@ -93,7 +93,7 @@ class ProductsController extends Controller
             return $product->reviews;
         })->avg('rating');
         // dd($averageRating); die;
-        return view('front.products.index')->with(compact('categories', 'products', 'totalResults', 'startIndex', 'endIndex', 'searchResults', 'averageRating'));
+        return view('products')->with(compact('categories', 'products', 'totalResults', 'startIndex', 'endIndex', 'searchResults', 'averageRating'));
     }
 
     public function allProducts()
@@ -119,6 +119,9 @@ class ProductsController extends Controller
         $category = Category::find($product->category_id);
         $images = ProductsImage::where('product_id', $product->id)->get();
 
+        //To view all categories
+        $categories = Category::get();
+
         // Fetch the reviews directly from the reviews table based on the product_id
         $reviews = Review::where('product_id', $product->id)->get();
 
@@ -127,7 +130,7 @@ class ProductsController extends Controller
         $averageRating = $reviews->avg('rating');
 
         // Pass the data to the view
-        return view('front.product.index', compact('product', 'category', 'attribute', 'images', 'totalReviews', 'averageRating', 'reviews'));
+        return view('product-details', compact('product', 'category', 'attribute', 'images', 'totalReviews', 'averageRating', 'reviews', 'categories'));
     }
 
     public function review(Request $request)

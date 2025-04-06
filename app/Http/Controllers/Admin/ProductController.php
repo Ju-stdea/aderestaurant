@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Uploader;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -124,7 +125,9 @@ class ProductController extends Controller
             $product->meta_title =     $request->meta_title;
             $product->meta_keywords =  $request->meta_keywords;
             $product->meta_description =$request->meta_description;
-    
+        
+            //dd(config('cloudinary'));
+
             // Check if a new image is uploaded
             if ($request->hasFile('main_image')) {
                 // Delete the old image from Cloudinary if it exists
@@ -133,10 +136,10 @@ class ProductController extends Controller
                 }
     
                 // Upload new image to Cloudinary
-                $uploadCloudinary = cloudinary()->upload(
+              $uploadCloudinary = cloudinary()->uploadApi()->upload(
                     $request->file('main_image')->getRealPath(),
                     [
-                        'folder' => 'amrasgrocery/products',
+                        'folder' => 'jhabis/products',
                         'resource_type' => 'auto',
                         'transformation' => [
                             'quality' => 'auto',
@@ -144,8 +147,9 @@ class ProductController extends Controller
                         ]
                     ]
                 );
-                $imageUrl = $uploadCloudinary->getSecurePath();
-                $imageId = $uploadCloudinary->getPublicId();
+                $imageUrl = $uploadCloudinary['secure_url'];
+                $imageId = $uploadCloudinary['public_id'];
+
             } else {
                 $imageUrl = $product->image_url; 
                 $imageId = $product->image_id;
@@ -155,15 +159,15 @@ class ProductController extends Controller
     
             // Handle video upload
             if ($request->hasFile('product_video')) {
-                $uploadVideoCloudinary = cloudinary()->upload(
+                $uploadCloudinary = cloudinary()->uploadApi()->upload(
                     $request->file('product_video')->getRealPath(),
                     [
-                        'folder' => 'amrasgrocery/products/videos',
+                        'folder' => 'jhabis/products/videos',
                         'resource_type' => 'video'
                     ]
                 );
-                $videoUrl = $uploadVideoCloudinary->getSecurePath();
-                $videoId = $uploadVideoCloudinary->getPublicId();
+                $videoUrl = $uploadVideoCloudinary['secure_url'];
+                $videoId = $uploadVideoCloudinary['public_id'];
             } else {
                 $videoUrl = $product->video_url ?? null;
                 $videoId = $product->video_id ?? null;  
@@ -315,21 +319,21 @@ class ProductController extends Controller
 
                 if ($productImages) {
                     foreach ($productImages as $productImage) {
-                        $uploadProductImage = cloudinary()->upload($productImage->getRealPath(), [
-                            'folder' => 'amrasgrocery/products',
+                        $uploadProductImage = cloudinary()->uploadApi()->upload($productImage->getRealPath(), [
+                            'folder' => 'jhabis/products',
                             'transformation' => [
                                 'quality' => 'auto',
                                 'fetch_format' => 'auto'
                             ]
                         ]);
-                        $imageUrl = $uploadProductImage->getSecurePath();
-                        $imageId = $uploadProductImage->getPublicId();
+                        $imageUrl = $uploadProductImage['secure_url'];
+                        $imageId = $uploadProductImage['public_id'];
 
                         $productId = Product::where('id', $id)->first();
                         $productImg = new ProductsImage();
                         $productImg->product_id = $productId->id;
-                        $productImg->image_url = $uploadProductImage->getSecurePath();
-                        $productImg->image_id = $uploadProductImage->getPublicId();
+                        $productImg->image_url = $uploadProductImage['secure_url'];
+                        $productImg->image_id = $uploadProductImage['public_id'];
                         $productImg->save();
                     }
                 }

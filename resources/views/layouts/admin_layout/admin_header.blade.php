@@ -2,11 +2,11 @@
     <div class="top-left">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-                <img src="{{ asset('images/admin_images/logo.png') }}" alt="Logo">
+                <img src="{{ asset('img/logo.jpg') }}" style="height: 50px;" alt="Logo">
             </a>
 
             <a class="navbar-brand hidden" href="{{ ('dashboard') }}"><img
-                    src="{{ asset('images/admin_images/logo2.png') }}" alt="Logo"></a>
+                    src="{{ asset('img/logo.jpg') }}" style="height: 50px;" alt="Logo"></a>
             <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
         </div>
     </div>

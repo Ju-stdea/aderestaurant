@@ -272,3 +272,6 @@ Route::prefix('admin')->namespace('Admin')->group(function () {
         Route::get('delete-banner/{id}', [BannersController::class, 'deleteBanner']);
     });
 });
+
+
+require __DIR__.'/auth.php';

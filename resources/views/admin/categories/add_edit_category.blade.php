@@ -103,12 +103,12 @@
                                 </div>
                                   
                                 <div class="row">
-                                    <div class="col-6">
+                                   <!--  <div class="col-6">
                                         <div class="form-group">
                                             <label for="product_image" class="control-label mb-1"><strong>Category Image (Optional)</strong></label>
                                             <input type="file" name="main_image" id="file-input" class="form-control-file">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-6 mt-3">
                                         <div class="form-group">
                                             <label for="featured_item"><strong>Featured Item</strong></label>

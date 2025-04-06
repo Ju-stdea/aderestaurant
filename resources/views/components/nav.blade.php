@@ -39,9 +39,13 @@
                                 <i class="fa fa-shopping-bag fa-2x"></i>
                                 <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                             </a>
-                            <a href="#" class="my-auto">
+                          @auth
+                            <a href="{{ url('dashboard') }}" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </a>
+                           @else
+                                <a href="{{ url('login') }}"><i class="fas fa-user-lock fa-2x"></i></a>
+                            @endauth
                         </div>
                     </div>
                 </nav>
@@ -58,12 +62,16 @@
                         <h5 class="modal-title" id="exampleModalLabel">Look for something nutritious.</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                     <form action="{{ route('search') }}" method="GET">
                     <div class="modal-body d-flex align-items-center">
+                       
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <input type="search" name="search" class="form-control p-3" placeholder="Type something healthy" aria-describedby="search-icon-1">
+                            <button id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></button>
                         </div>
+                        
                     </div>
+                    </form>
                 </div>
             </div>
         </div>

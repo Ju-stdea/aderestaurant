@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amras Grocery Store</title>
+    <title>Jhabis Food Mart</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Amras Grocery Store">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,11 +26,11 @@
         href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
 
-    <link rel="stylesheet" href="{{ url('css/admin_css/lib/chosen/chosen.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/admin_css/cs-skin-elastic.css') }}">
-    <link rel="stylesheet" href="{{ url('css/admin_css/lib/datatable/dataTables.bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/admin_css/image-drop.css') }}">
-    <link rel="stylesheet" href="{{ url('css/admin_css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/lib/chosen/chosen.min.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/cs-skin-elastic.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/lib/datatable/dataTables.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/image-drop.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/style.css') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jqvmap@1.5.1/dist/jqvmap.min.css" rel="stylesheet">

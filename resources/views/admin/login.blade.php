@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amras Grocery Store</title>
+    <title>Jhabis Food Mart</title>
     <meta name="description" content="Amras Grocery Store">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
-    <link rel="stylesheet" href="{{ url('css/admin_css/cs-skin-elastic.css') }}">
-    <link rel="stylesheet" href="{{ url('css/admin_css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/cs-skin-elastic.css') }}">
+    <link rel="stylesheet" href="{{ url('admin/css/admin_css/style.css') }}">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 </head>
 
@@ -52,7 +52,7 @@
             <div class="login-content">
                 <div class="login-logo">
                     <a href="index.html">
-                        <img class="align-content" src="{{ asset('images/admin_images/header-logos.png') }}" alt="">
+                        <img class="align-content" src="{{ asset('img/logo.jpg') }}" style="height: 130px; border-radius: 50%;" alt="">
                     </a>
                 </div>
                 <div class="login-form">

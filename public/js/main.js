@@ -149,3 +149,134 @@
 
 })(jQuery);
 
+
+
+//Ajax for adding product to cart and wishlist
+
+$(document).ready(function () {
+  function showToast(message, type) {
+    Swal.fire({
+      text: message,
+      icon: type,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  }
+
+  $("#addCart").on("click", function (e) {
+    e.preventDefault();
+
+    let form = $(this).closest('form');
+    let productId = $(this).data("product-id");
+    let quantity = form.find('input[name="quantity"]').val();
+
+    $.ajax({
+      url: form.attr('action'),
+      type: 'GET',
+      data: form.serialize() + '&product_id=' + productId + '&quantity=' + quantity,
+      success: function (response) {
+        showToast('Product added to cart successfully!', 'success');
+        window.location.reload();
+      },
+      error: function (xhr) {
+        // Parse the response JSON to get the error message
+        let errorMessage = 'Error adding product to cart!';
+
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMessage = xhr.responseJSON.message;
+        }
+
+        // Show the error message using your toast function
+        showToast(errorMessage, 'error');
+      }
+    });
+  });
+  $(".product-btn").on("click", function (e) {
+    e.preventDefault();
+
+    let form = $(this).closest('form');
+    let productId = $(this).data("product-id");
+    let quantity = form.find('input[name="quantity"]').val();
+
+    $.ajax({
+      url: form.attr('action'),
+      type: 'GET',
+      data: form.serialize() + '&product_id=' + productId + '&quantity=' + quantity,
+      success: function (response) {
+        showToast('Product added to cart successfully!', 'success');
+        window.location.reload();
+      },
+      error: function (xhr) {
+        // Parse the response JSON to get the error message
+        let errorMessage = 'Error adding product to cart!';
+
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          errorMessage = xhr.responseJSON.message;
+        }
+
+        // Show the error message using your toast function
+        showToast(errorMessage, 'error');
+      }
+    });
+  });
+
+  //Wishlist 
+  function showToast(message, type) {
+    Swal.fire({
+      text: message,
+      icon: type,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  }
+
+  $(".addWishlistBtn").on("click", function (e) {
+    e.preventDefault();
+
+    let form = $(this).closest('form');
+    let productId = $(this).data("product-id");
+
+    $.ajax({
+      url: form.attr('action'),
+      type: 'GET',
+      data: form.serialize() + '&product_id=' + productId,
+      success: function (response) {
+        showToast(response.message, 'success');
+        window.location.reload();
+      },
+      error: function (xhr) {
+        let errorMessage = xhr.responseJSON.message || 'Error adding product to wishlist!';
+        showToast(errorMessage, 'error');
+      }
+    });
+  });
+
+  $(".remove-item-wishlist").on("click", function (e) {
+    e.preventDefault();
+
+    let productId = $(this).data("product-id");
+
+    $.ajax({
+      url: 'wishlist/removeWishlist',
+      type: 'GET',
+      data: {
+        product_id: productId
+      },
+      success: function (response) {
+        showToast(response.message, 'success');
+        window.location.reload();
+      },
+      error: function (xhr) {
+        let errorMessage = xhr.responseJSON.message || 'Error removing item from wishlist!';
+        showToast(errorMessage, 'error');
+      }
+    });
+  });
+
+
+});
+

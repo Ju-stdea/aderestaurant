@@ -84,7 +84,7 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <img src="https://res.cloudinary.com/doeoa6jzb/image/upload/v1728430577/logo_otetxx.png" alt="Amras logo">
+            <img src="https://res.cloudinary.com/dww7q9k1e/image/upload/v1743808910/logo_i0rcjv.jpg" style="height: 130px; border-radius: 50%;" alt="Amras logo">
         </div>
 
         <div class="content">

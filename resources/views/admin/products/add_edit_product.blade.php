@@ -71,7 +71,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="product_price" class="control-label mb-1"><strong>Product Price ($)</strong></label>
+                                            <label for="product_price" class="control-label mb-1"><strong>Product Price (₦)</strong></label>
                                             <input id="product_price" @if(!empty($productdata->product_price)) value="{{ $productdata->product_price }}" @else value="{{ old('product_price') }}" @endif name="product_price" type="number" class="form-control" aria-required="true" aria-invalid="false" placeholder="Enter product price" required>
                                         </div>
 

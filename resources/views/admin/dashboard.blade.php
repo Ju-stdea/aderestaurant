@@ -40,7 +40,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">$<span>{{ $todaySales }}</span></div>
+                                    <div class="stat-text">₦<span>{{ $todaySales }}</span></div>
                                     <div class="stat-heading"><strong>Today's Sales (Completed Order)</strong></div>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                 <i class="ti-money text-success border-success"></i>
                             </div>
                             <div class="stat-content dib">
-                                    <div class="stat-text">$<span>{{ $pendingSales }}</span></div>
+                                    <div class="stat-text">₦<span>{{ $pendingSales }}</span></div>
                                     <div class="stat-heading">This Month</div>
                                     <div class="stat-heading"><strong>Pending Sales </strong></div>
                             </div>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="stat-content">
                                 <div class="text-left dib">
-                                    <div class="stat-text">$<span>{{ $totalSales }}</span></div>
+                                    <div class="stat-text">₦<span>{{ $totalSales }}</span></div>
                                     <div class="stat-heading"><strong>This Month Sales (Completed and Paid)</strong></div>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                 <i class="ti-money text-success border-success"></i>
                             </div>
                             <div class="stat-content dib">
-                                    <div class="stat-text">$<span>{{ $allSales }}</span></div>
+                                    <div class="stat-text">₦<span>{{ $allSales }}</span></div>
                                     <div class="stat-heading"><strong>All Total Sales</strong></div>
                             </div>
                         </div>

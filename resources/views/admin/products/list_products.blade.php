@@ -60,7 +60,7 @@
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
                                     <td>{{ $product->product_name }}</td>
-                                    <td>${{ $product->product_price }}</td>
+                                    <td>₦{{ $product->product_price }}</td>
                                     <td>
                                         <img style="width:100px; height:100px" src="{{ $product->image_url }}" alt="">
                                     </td>

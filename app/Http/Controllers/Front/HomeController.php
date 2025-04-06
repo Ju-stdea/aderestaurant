@@ -70,7 +70,7 @@ class HomeController extends Controller
 
 
         // Get the first category added to the database
-         $firstCategory = Category::where('category_name', 'Beauty & Personal Care')->orderBy('created_at', 'desc')->first();
+         $firstCategory = Category::where('category_name', 'Flour')->orderBy('created_at', 'desc')->first();
 
         // Fetch the first 4 products under the first category
         $productItems = Product::where('category_id', $firstCategory->id)
@@ -78,6 +78,6 @@ class HomeController extends Controller
                             ->with('reviews')
                             ->get();
 
-        return view('front.home')->with(compact('categories', 'products', 'arrivals', 'banners', 'isCoverCategories', 'topsellings', 'popularsales', 'productItems', 'firstCategory', 'averageRating'));
+        return view('welcome')->with(compact('categories', 'products', 'arrivals', 'banners', 'isCoverCategories', 'topsellings', 'popularsales', 'productItems', 'firstCategory', 'averageRating'));
     }
-}
+}  
