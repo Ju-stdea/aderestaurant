@@ -134,19 +134,21 @@
     // Product Quantity
     $('.quantity button').on('click', function () {
         var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
-        if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        button.parent().parent().find('input').val(newVal);
-    });
+        var input = button.parent().parent().find('input');
+        var oldValue = parseFloat(input.val());
 
+        var newVal;
+        if (button.hasClass('btn-plus')) {
+            newVal = oldValue + 1;
+        } else {
+            newVal = (oldValue > 0) ? oldValue - 1 : 0;
+        }
+
+        input.val(newVal);
+
+        // Update the other input field
+        document.getElementById('number_qaun').value = newVal;
+    });
 })(jQuery);
 
 
@@ -278,5 +280,130 @@ $(document).ready(function () {
   });
 
 
+    $(".remove-item").on("click", function (e) {
+    e.preventDefault();
+
+    let productId = $(this).data("product-id");
+
+    $.ajax({
+      url: 'carts/cart/remove',
+      type: 'GET',
+      data: {
+        product_id: productId
+      },
+      success: function (response) {
+        showToast(response.message, 'success');
+        window.location.reload();
+      },
+      error: function (xhr) {
+        let errorMessage = xhr.responseJSON.message || 'Error removing item from cart!';
+        showToast(errorMessage, 'error');
+      }
+    });
+  });
+        //update profile
+        $('#profileUpdateForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let $button = $(this).find('button[type="submit"]');
+            let originalText = $button.html();
+
+            // Show updating text
+            $button.prop('disabled', true).html('Updating...');
+
+            $.ajax({
+                url: "/profile/update",
+                type: "POST",
+                data: $(this).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                },
+                success: function (response) {
+                    showToast('Profile updated successfully!', 'success');
+                },
+                error: function (xhr) {
+                    let errors = xhr.responseJSON.errors;
+                    let message = 'Something went wrong.';
+                    if (errors) {
+                        message = Object.values(errors).map(err => err[0]).join('\n');
+                    }
+                    showToast(message, 'error');
+                },
+                complete: function () {
+                    // Restore original button
+                    $button.prop('disabled', false).html(originalText);
+                }
+            });
+        });
+
+// Update shipping address
+$('#shippingAddressUpdateForm').on('submit', function (e) {
+    e.preventDefault();
+
+    let $button = $(this).find('button[type="submit"]');
+    let originalText = $button.html();
+
+    // Show updating text
+    $button.prop('disabled', true).html('Updating...');
+
+    $.ajax({
+        url: "/shipping-address/update", 
+        type: "POST",
+        data: $(this).serialize(),
+        headers: {
+            'X-CSRF-TOKEN': $('input[name="_token"]').val()
+        },
+        success: function (response) {
+            showToast('Shipping address updated successfully!', 'success');
+        },
+        error: function (xhr) {
+            // Only show errors from the backend
+            let message = 'Something went wrong.';
+            if (xhr.responseJSON && xhr.responseJSON.errors) {
+                message = Object.values(xhr.responseJSON.errors).map(err => err[0]).join('\n');
+            }
+            showToast(message, 'error');
+        },
+        complete: function () {
+            // Restore original button text and re-enable
+            $button.prop('disabled', false).html(originalText);
+        }
+    });
 });
+
+
+});
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabButtons = document.querySelectorAll('[data-tab]');
+        const tabContents = document.querySelectorAll('[data-tab-content]');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+
+                // Remove active from all buttons (optional highlight logic)
+                tabButtons.forEach(btn => btn.classList.remove('bg-green-100'));
+
+                // Add active style (optional highlight logic)
+                button.classList.add('bg-green-100');
+
+                // Hide all contents
+                tabContents.forEach(content => {
+                    content.classList.add('d-none');
+                    content.classList.remove('active');
+                });
+
+                // Show selected content
+                const activeTab = document.querySelector(`[data-tab-content="${tab}"]`);
+                if (activeTab) {
+                    activeTab.classList.remove('d-none');
+                    activeTab.classList.add('active');
+                }
+            });
+        });
+    });
+
 

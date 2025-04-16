@@ -14,51 +14,53 @@ use Log;
 class CartController extends Controller
 {
 
-    public function carts()
-    {
-        $user = auth()->user();
-        $cart = [];
-        $totalQuantity = 0;
-        $totalAmount = 0;
+public function carts()
+{
+    $user = auth()->user();
+    $cart = [];
+    $totalQuantity = 0;
+    $totalAmount = 0;
 
-        if ($user) {
-            // User is logged in, get cart based on customer_id
-            $cartItems = Cart::where('customer_id', $user->id)->get();
-        } else {
-            // User is not logged in, get cart from session (Database using session id)
-            $sessionId = Session::getId();
-            $cartItems = Cart::where('session_id', $sessionId)->get();
-        }
-
-        // Create a unique cart based on product_id
-        foreach ($cartItems as $item) {
-            // Ensure the product is not already in the cart
-            if (!isset($cart[$item->product_id])) {
-                // Get the discounted price
-                $discountedPrice = Product::getDiscountedPrice($item->product_id);
-
-                // Determine the final price
-                $finalPrice = $discountedPrice > 0 ? $discountedPrice : $item->product->product_price;
-
-                // Add the product to the cart
-                $cart[$item->product_id] = [
-                    'id' => $item->product_id,
-                    'product_name' => $item->product->product_name,
-                    'product_price' => $finalPrice,
-                    'quantity' => $item->quantity, // Keep original quantity
-                    'total' => $item->quantity * $finalPrice, // Calculate total for display
-                    'image_url' => $item->product->image_url,
-                    'size' => $item->size,
-                ];
-            }
-        }
-
-        // Count the total unique quantity and total amount for unique products
-        $totalQuantity = count($cart); // Count of unique products
-        $totalAmount = array_sum(array_column($cart, 'total')); // Sum of total values for unique products
-
-        return view('front.carts.index', compact('cart', 'totalQuantity', 'totalAmount'));
+    if ($user) {
+        // User is logged in, get cart based on customer_id
+        $cartItems = Cart::where('customer_id', $user->id)->get();
+    } else {
+        // User is not logged in, get cart from session (Database using session id)
+        $sessionId = Session::getId();
+        $cartItems = Cart::where('session_id', $sessionId)->get();
     }
+
+    // Create a unique cart based on product_id
+    foreach ($cartItems as $item) {
+        if (!isset($cart[$item->product_id])) {
+            // Get the discounted price or default product price
+            $discountedPrice = Product::getDiscountedPrice($item->product_id);
+            
+            $rawPrice = $discountedPrice > 0 ? $discountedPrice : $item->product->product_price;
+
+            // Remove ₦ and commas to ensure numeric value
+            $finalPrice = floatval(str_replace(['₦', ','], '', $rawPrice));
+
+            // Add the product to the cart
+            $cart[$item->product_id] = [
+                'id' => $item->product_id,
+                'product_name' => $item->product->product_name,
+                'product_price' => $finalPrice,
+                'quantity' => $item->quantity,
+                'total' => $item->quantity * $finalPrice,
+                'image_url' => $item->product->image_url,
+                'size' => $item->size,
+            ];
+        }
+    }
+
+    // Total unique products and overall amount
+    $totalQuantity = count($cart);
+    $totalAmount = array_sum(array_column($cart, 'total'));
+
+    return view('cart', compact('cart', 'totalQuantity', 'totalAmount'));
+}
+
 
 
 

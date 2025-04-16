@@ -12,10 +12,10 @@ class UsersController extends Controller
     // }
 
     public function about(){
-        return view('front.about.index');
+        return view('about');
     }
 
     public function contact(){
-        return view('front.contact.index');
+        return view('contact');
     }
 }

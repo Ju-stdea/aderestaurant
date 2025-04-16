@@ -10,9 +10,27 @@
                             </a>
                         </div>
                         <div class="col-lg-6">
+                           @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if (session('subscribe'))
+                            <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                                <h6> {{ session('subscribe') }} </h6>
+                            </div>
+                        @endif
                             <div class="position-relative mx-auto">
-                                <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
+
+                        <form action="{{ route('subscribe') }}" id="subscribe-form" method="get">
+                            @csrf
+                                <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" name="email" type="email" placeholder="Your Email">
                                 <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
+                            </form>
                             </div>
                         </div>
                         <div class="col-lg-3">
@@ -36,9 +54,9 @@
                             <h4 class="text-light mb-3">Info</h4>
                             <a class="btn-link" href="{{ url('/about') }}">About Us</a>
                             <a class="btn-link" href="{{ url('/contact') }}">Contact Us</a>
-                            <a class="btn-link" href="{{ url('/privacy') }}">Privacy Policy</a>
-                            <a class="btn-link" href="{{ url('/terms') }}">Terms & Condition</a>
-                            <a class="btn-link" href="{{ url('/return policy') }}">Return Policy</a>
+                            <a class="btn-link" href="{{ url('/privacy-policy') }}">Privacy Policy</a>
+                            <a class="btn-link" href="{{ url('/terms-of-service') }}">Terms & Condition</a>
+                            <a class="btn-link" href="{{ url('/returns-and-refund') }}">Return Policy</a>
                             <a class="btn-link" href="{{ url('/faq') }}">FAQs & Help</a>
                         </div>
                     </div>
@@ -86,7 +104,67 @@
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#subscribe-form').on('submit', function (e) {
+            e.preventDefault();  // Prevent normal form submission
 
+            var form = $(this);
+            var email = form.find('input[name="email"]').val();
+            var submitButton = form.find('button[type="submit"]');
+
+            // Simple validation
+            if (email === '') {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Change button text to "Loading..." and disable the button
+            submitButton.prop('disabled', true);
+            submitButton.text('Subscribing...');
+
+            // Send AJAX request
+            $.ajax({
+                url: form.attr('action'),
+                type: 'GET',
+                data: form.serialize(),  // Serialize form data
+                success: function (response) {
+                    // Show success message
+                    Swal.fire({
+                        text: 'Subscription successful, Thank you!',
+                        icon: 'success',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+
+                    // Optionally clear the input field after successful subscription
+                    form.find('input[name="email"]').val('');
+
+                    // Reset button text and enable it
+                    submitButton.prop('disabled', false);
+                    submitButton.text('Subscribe Now');
+                },
+                error: function (xhr) {
+                    // Handle error if any
+                    Swal.fire({
+                        text: 'This email has already been subscribed.!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+
+                    // Reset button text and enable it
+                    submitButton.prop('disabled', false);
+                    submitButton.text('Subscribe Now');
+                }
+            });
+        });
+    });
+</script>
         
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

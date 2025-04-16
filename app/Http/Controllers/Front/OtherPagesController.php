@@ -9,19 +9,19 @@ use App\Models\Subscribe;
 class OtherPagesController extends Controller
 {
     public function faq(){
-        return view('front.faq.index');
+        return view('faq');
     }
 
     public function termsOfService(){
-        return view('front.terms-of-service.index');
+        return view('terms-of-service');
     }
 
     public function returnsAndRefunds(){
-        return view('front.returns-and-refund.index');
+        return view('returns-and-refund');
     }
     
     public function privacyPolicy(){
-        return view('front.privacy-policy.index');
+        return view('privacy-policy');
     }
     public function subscribe(Request $request)
     {

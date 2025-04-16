@@ -44,9 +44,11 @@ class CheckoutController extends Controller
             $product = $item->product;
 
             $discountedPrice = Product::getDiscountedPrice($product->id);
+            
+            $rawPrice = $discountedPrice > 0 ? $discountedPrice : $item->product->product_price;
 
-            $finalPrice = ($discountedPrice > 0) ? $discountedPrice : $product->product_price;
-
+            // Remove ₦ and commas to ensure numeric value
+            $finalPrice = floatval(str_replace(['₦', ','], '', $rawPrice));
 
             $itemTotal = $item->quantity * $finalPrice;
 
@@ -54,7 +56,7 @@ class CheckoutController extends Controller
 
             $itemWeight = $item->quantity * $product->product_weight;
             $totalWeight += $itemWeight;
-
+ 
             $cart[$product->id] = [
                 'id' => $product->id,
                 'product_name' => $product->product_name,
@@ -68,7 +70,7 @@ class CheckoutController extends Controller
         }
 
 
-        return view('front.checkout.index', compact('countries', 'cart', 'subTotal', 'totalWeight', 'store', 'deliveryAddress'));
+        return view('checkout', compact('countries', 'cart', 'subTotal', 'totalWeight', 'store', 'deliveryAddress'));
     }
 
 
@@ -77,6 +79,6 @@ class CheckoutController extends Controller
     {
         $countries = Country::all();
 
-        return view('front.checkout.success.index', compact('countries'));
+        return view('checkout-success', compact('countries'));
     }
 }

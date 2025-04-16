@@ -505,7 +505,7 @@
                     </div>
                     <div class="d-flex align-items-center flex-nowrap">
                         <div class="bg-secondary rounded">
-                            <img src="https://source.unsplash.com/100x100/?african,food" class="img-fluid rounded" alt="Client Image">
+                            <img src="https://source.unsplash.com/100x100/?african,food" class="img-fluid rounded" alt="Image">
                         </div>
                         <div class="ms-4 d-block">
                             <h4 class="text-dark">Zainab M.</h4>

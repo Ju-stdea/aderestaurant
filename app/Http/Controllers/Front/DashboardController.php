@@ -31,7 +31,8 @@ class DashboardController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             $countries = Country::all();
-            $deliveryAddresses = $user->deliveryAddresses;
+            $deliveryAddresses = $user->deliveryAddresses()->first();
+
 
             // Fetch orders that do not have a review yet
             $reviewsActiveOrders = OrdersProduct::where('customer_id', $user->id)
@@ -63,7 +64,7 @@ class DashboardController extends Controller
 
             $orders = Order::where('customer_id', $user->id)->with('orders_products.product')->get();
 
-            return view('front.user-dashboard.index', compact('countries', 'deliveryAddresses', 'reviewsActiveOrders', 'reviewedproducts', 'wishlist', 'orderCount', 'pendingOrderCount', 'reviewCount', 'orders'));
+            return view('dashboard', compact('countries', 'deliveryAddresses', 'reviewsActiveOrders', 'reviewedproducts', 'wishlist', 'orderCount', 'pendingOrderCount', 'reviewCount', 'orders'));
         }
 
         return redirect('login')->with('error', 'Oops! Kindly Log In.');
@@ -198,8 +199,7 @@ class DashboardController extends Controller
 
             $request->validate([
                 'address' => 'required|string|max:255',
-                'state_country_code' => 'required',
-                'state_iso2' => 'required',
+                'state' => 'required',
                 'city_name' => 'required',
                 'zipcode' => 'required|numeric',
                 'addressType' => 'required|in:billing,shipping',
@@ -210,8 +210,8 @@ class DashboardController extends Controller
 
             if ($request->addressType === 'billing') {
                 $user->address = $request->address;
-                $user->country = $request->state_country_code;
-                $user->state = $request->state_iso2;
+                $user->country = "NIGERIA";
+                $user->state = $request->state;
                 $user->city = $request->city_name;
                 $user->zipcode = $request->zipcode;
                 $user->save();
@@ -222,8 +222,8 @@ class DashboardController extends Controller
                     ['user_id' => $user->id],
                     [
                         'address_line' => $request->address,
-                        'country' => $request->state_country_code,
-                        'state' => $request->state_iso2,
+                        'country' => "NIGERIA",
+                        'state' => $request->state,
                         'city' => $request->city_name,
                         'zipcode' => $request->zipcode,
                     ]

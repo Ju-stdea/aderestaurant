@@ -5,7 +5,7 @@
 ?>
         <!-- Single Page Header start -->
         <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Product Detail</h1>
+            <h1 class="text-center text-white display-6">Product Details</h1>
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active text-white">Product Detail</li>
@@ -35,6 +35,7 @@
 
                                 @if ($discounted_price > 0)
                                     {{ $discounted_price }}
+                                    <span class="text-danger text-decoration-line-through">₦ {{ $product->product_price }}</span>
                                 @else
                                     {{ $product->product_price }}
                                 @endif
@@ -58,7 +59,13 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                <form id="cart-form" action="{{ route('add-to-shopping-cart') }}" method="GET">
+                                    <input type="hidden" value="{{ $product->id }}" name="product_id">
+                                    <input type="hidden" id="number_qaun" class="number_qaun" name="quantity" min="1"
+                                        value="1">
+                                    <button id="addCart"
+                                        data-product-id="{{ $product->id }}" class="btn shop-btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                                </form>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -106,51 +113,56 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
-                                        <div class="d-flex">
-                                            <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
-                                            <div class="">
-                                                <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                                <div class="d-flex justify-content-between">
-                                                    <h5>Jason Smith</h5>
-                                                    <div class="d-flex mb-3">
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star"></i>
+                                    @if ($reviews->isEmpty())
+                                        <p>No reviews yet. Be the first to review this product!</p>
+                                    @else
+                                        @foreach ($reviews as $review)
+                                            <div class="d-flex mb-4">
+                                                <!-- Avatar -->
+                                                <img src="{{ $review->customer->avatar ?? asset('images/front_images/homepage-one/aurthor-img-1.webp') }}"
+                                                     class="img-fluid rounded-circle p-3"
+                                                     style="width: 100px; height: 100px;" alt="">
+
+                                                <!-- Review Content -->
+                                                <div>
+                                                    <p class="mb-2" style="font-size: 14px;">
+                                                        {{ \Carbon\Carbon::parse($review->created_at)->format('F d, Y') }}
+                                                    </p>
+                                                    <div class="d-flex justify-content-between">
+                                                        <h5>
+                                                            @if ($review->customer)
+                                                                {{ $review->customer->first_name }} {{ $review->customer->last_name }}
+                                                            @else
+                                                                Anonymous
+                                                            @endif
+                                                        </h5>
+
+                                                        <!-- Star Ratings -->
+                                                        <div class="d-flex mb-3 ms-3">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i class="fa fa-star {{ $i <= $review->rating ? 'text-secondary' : '' }}"></i>
+                                                            @endfor
+                                                        </div>
                                                     </div>
+
+                                                    <!-- Review Text -->
+                                                    <p>
+                                                        {{ $review->review ?? 'Not specified' }}
+                                                    </p>
                                                 </div>
-                                                <p>The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic 
-                                                    words etc. Susp endisse ultricies nisi vel quam suscipit </p>
                                             </div>
-                                        </div>
-                                        <div class="d-flex">
-                                            <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
-                                            <div class="">
-                                                <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                                <div class="d-flex justify-content-between">
-                                                    <h5>Sam Peters</h5>
-                                                    <div class="d-flex mb-3">
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star text-secondary"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                </div>
-                                                <p class="text-dark">The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic 
-                                                    words etc. Susp endisse ultricies nisi vel quam suscipit </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        @endforeach
+                                    @endif
+
+                                    </div><!-- 
                                     <div class="tab-pane" id="nav-vision" role="tabpanel">
                                         <p class="text-dark">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
                                             amet diam et eos labore. 3</p>
                                         <p class="mb-0">Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore.
                                             Clita erat ipsum et lorem et sit</p>
-                                    </div>
+                                    </div> -->
                                 </div>
-                            </div>
+                            </div><!-- 
                             <form action="#">
                                 <h4 class="mb-5 fw-bold">Leave a Reply</h4>
                                 <div class="row g-4">
@@ -185,7 +197,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </form> -->
                         </div>
                     </div>
                     <div class="col-lg-4 col-xl-3">
