@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Session;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 class ShippingController extends Controller
 {
@@ -22,6 +25,123 @@ class ShippingController extends Controller
     /**
      * Validate ShipTo address and then get the shipping rate.
      */
+
+    public function validateAddress(Request $request)
+    {
+        try {
+            //Log::info('Validating address with:', $request->all()); // Log input
+
+            //Log::info('Using token: ' . env('SHIPBUBBLE_API_KEY'));
+
+            
+         $response = Http::withToken(env('SHIPBUBBLE_API_KEY'))
+            ->post('https://api.shipbubble.com/v1/shipping/address/validate', [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address
+            ]);
+
+
+            //Log::info('Shipbubble response:', $response->json()); // Log
+
+            return response()->json($response->json(), $response->status());
+
+            //Log::info('Shipbubble response:', $response->json()); // Log success
+
+        } catch (\Exception $e) {
+            Log::error('Shipbubble validation error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server error. Please try again.'], 500);
+        }
+    }
+
+public function calculateShipping(Request $request)
+{
+    try {
+        // Set your fixed sender address code
+        $senderAddressCode = 74266698;
+
+        // Combine receiver fields to a single address
+        $receiverFullAddress = $request->input('receiver.postal');
+
+        if (!$receiverFullAddress) {
+            return response()->json(['message' => 'Receiver postal code is missing.'], 422);
+        }
+
+        Log::info($request->items);
+
+        // Prepare package items
+        $packageItems = collect($request->items)->map(function ($item) {
+            return [
+                'name'         => $item['name'],
+                'description'  => $item['description'],
+                'unit_weight'  => $item['unit_weight'], // in KG
+                'unit_amount'  => $item['unit_amount'], // in NGN
+                'quantity'     => $item['quantity'],
+            ];
+        })->toArray();
+
+        // Calculate the largest dimension from all items
+        $dimension = $this->calculateMaxDimension($request->items);
+
+        // Build the payload
+        $payload = [
+            'sender_address_code'    => $senderAddressCode,
+            'reciever_address_code'  => $receiverFullAddress, // dynamic address code
+            'pickup_date'            => now()->format('Y-m-d'),
+            'category_id'            => 2178251,
+            'package_items'          => $packageItems,
+            'package_dimension'      => $dimension,
+            'service_type'           => 'pickup',
+            'delivery_instructions'  => 'Perishable items, please be careful',
+        ];
+
+        // Send to Shipbubble
+        $response = Http::withToken(env('SHIPBUBBLE_API_KEY'))
+            ->post('https://api.shipbubble.com/v1/shipping/fetch_rates', $payload);
+
+        if (!$response->ok()) {
+            return response()->json(['message' => $response->body()], 500);
+        }
+
+         //Log::info($response->json());
+        return response()->json($response->json());
+
+    } catch (\Exception $e) {
+        return response()->json(['message' => $e->getMessage()], 500);
+    }
+}
+
+
+private function getShipbubbleAddressCode($fullAddress)
+{
+    $response = Http::withToken(env('SHIPBUBBLE_API_KEY'))
+        ->post('https://api.shipbubble.com/v1/addresses/resolve', [
+            'address' => $fullAddress
+        ]);
+
+    if ($response->ok() && isset($response['address_code'])) {
+        return $response['address_code'];
+    }
+
+    throw new \Exception('Failed to resolve address code for: ' . $fullAddress);
+}
+
+private function calculateMaxDimension($items)
+{
+    $max = ['length' => 0, 'width' => 0, 'height' => 0];
+
+    foreach ($items as $item) {
+        $d = $item['dimension'];
+        $max['length'] = max($max['length'], $d['length']);
+        $max['width']  = max($max['width'], $d['width']);
+        $max['height'] = max($max['height'], $d['height']);
+    }
+
+    return $max;
+}
+ 
+
     public function getRate(Request $request)
     {
 
@@ -391,7 +511,7 @@ class ShippingController extends Controller
      *
      * @return bool
      */
-    private function validateAddress()
+    private function validateAddres()
     {
         // I'm not  using this method in the code below but I'm leaving it here for reference
         // TODO: Implement address validation
@@ -400,7 +520,7 @@ class ShippingController extends Controller
 
         $shipToAddress = $this->buildAddressValidationRequest($address);
 
-        $validationResponse = $this->upsService->validateAddress($shipToAddress);
+        $validationResponse = $this->upsService->validateAddres($shipToAddress);
 
         return $this->isAddressValid($validationResponse);
     }

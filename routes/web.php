@@ -65,8 +65,9 @@ Route::group(['middleware' => ['auth:web']], function () {
     Route::get('/shipping/track/{trackingNumber}', [ShippingController::class, 'trackShipment']);
 });
 
+Route::post('/validate-address', [\App\Http\Controllers\ShippingController::class, 'validateAddress']);
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::post('/calculate-shipping', [ShippingController::class, 'calculateShipping'])->name('calculate.shipping');
 Route::post('/shipping/rate', [ShippingController::class, 'getRate'])->name('shipping.rates');
 Route::post('paypal/checkout', [PayPalController::class, 'payPalcheckOut'])->name('checkout.process');
 Route::get('paypal/success', [PayPalController::class, 'payPalcheckOutSuccess'])->name('paypal.success');

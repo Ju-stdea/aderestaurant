@@ -3,10 +3,10 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Fruitables - Vegetable Website Template</title>
+        <title>Fruitables - Trusted, Preferred, Quality, Enriching</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
-        <meta content="" name="description">
+        <meta content="To be the most trusted, preferred and leading food processing and packaging company, renowed for producing high quality, netritious, delicious, and safe food products that exceed customer expectations and enrich the lives of our customers and communities" name="description">
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">

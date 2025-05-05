@@ -38,4 +38,9 @@ return [
     'brevo' => [
         'key' => env('BREVO_API_KEY', 'your-api-key'),
     ],
+
+    'shipbubble' => [
+        'api_key' => env('SHIPBUBBLE_API_KEY'),
+        'environment' => env('SHIPBUBBLE_ENVIRONMENT', 'production')
+    ],
 ];
