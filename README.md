@@ -28,7 +28,7 @@ Follow these steps to set up the project on your local machine:
 
 ### 1️⃣ Clone the Repository
 
-git clone https://github.com/Ju-stdea/diablobankingsystem.git
+git clone https://github.com/Ju-stdea/aderestaurant
 2️⃣ Navigate into the Project Folder
 
  aderestaurant
